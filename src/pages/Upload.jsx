@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import recordService from "../services/recordService";
 
 const Upload = () => {
-  const { user } = useAuth();
+  useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -53,23 +53,32 @@ const Upload = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const newRecord = {
-      id: Date.now(),
-      ...formData,
-      userEmail: user?.email,
-      createdAt: new Date().toISOString(),
-    };
+  console.log("UPLOAD BUTTON CLICKED");
 
-    recordService.create(newRecord);
+  setIsSubmitting(true);
 
-    setTimeout(() => {
-      navigate("/reports");
-    }, 300);
-  };
+  try {
+    console.log("Sending data:", formData);
+
+    const response = await recordService.create(formData);
+
+    console.log("SUCCESS:", response);
+
+    navigate("/reports");
+
+  } catch (error) {
+    console.log(
+      "UPLOAD ERROR:",
+      error.message
+    );
+
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <MainLayout>

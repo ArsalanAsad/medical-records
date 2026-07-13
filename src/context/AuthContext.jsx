@@ -5,6 +5,8 @@ const AuthContext = createContext();
 
 const CURRENT_USER_KEY = "medivault_current_user";
 
+const TOKEN_KEY = "medivault_token";
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
@@ -43,11 +45,16 @@ export const AuthProvider = ({ children }) => {
         password,
       });
 
-      const loggedInUser = data.user || data;
+     const loggedInUser = data.user || data;
 
       localStorage.setItem(
-        CURRENT_USER_KEY,
-        JSON.stringify(loggedInUser)
+      CURRENT_USER_KEY,
+      JSON.stringify(loggedInUser)
+      );
+
+      localStorage.setItem(
+      TOKEN_KEY,
+      data.token
       );
 
       setUser(loggedInUser);
@@ -64,10 +71,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+    const logout = () => {
     localStorage.removeItem(CURRENT_USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
     setUser(null);
-  };
+    };
 
   const updateProfile = (updatedData) => {
     if (!user) {
@@ -108,6 +116,10 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const getToken = () => {
+  return localStorage.getItem(TOKEN_KEY);
 };
 
 export const useAuth = () => useContext(AuthContext);

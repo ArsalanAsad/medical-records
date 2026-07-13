@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import { useAuth } from "../context/AuthContext";
-import { seedDemoRecords } from "../services/localStorage";
 import recordService from "../services/recordService";
 import ReportCard from "../components/ReportCard";
 import PageHeader from "../components/PageHeader";
@@ -13,9 +12,24 @@ const Dashboard = () => {
   const [records, setRecords] = useState([]);
 
  useEffect(() => {
-  if (!user?.email) return;
-  seedDemoRecords(user.email);
-  setRecords(recordService.getByUser(user.email));
+  const fetchRecords = async () => {
+    if (!user) return;
+
+    try {
+      const data = await recordService.getByUser();
+
+      setRecords(data);
+
+    } catch (error) {
+      console.log(
+        "Failed to load records:",
+        error.message
+      );
+    }
+  };
+
+  fetchRecords();
+
 }, [user]);
 
   const stats = useMemo(() => {
