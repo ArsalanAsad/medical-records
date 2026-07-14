@@ -1,36 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import recordService from "../services/recordService";
 
-const EditRecord = () => {
+  const EditRecord = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const existingRecord = recordService.getById(id);
+  const [formData, setFormData] = useState(null);
 
-  const [formData, setFormData] = useState(
-    existingRecord || {
-      title: "",
-      type: "Lab Report",
-      hospital: "",
-      doctor: "",
-      recordDate: "",
-      notes: "",
-      fileName: "",
-      fileData: "",
-      fileType: "",
+  useEffect(() => {
+  const loadRecord = async () => {
+    try {
+      const data = await recordService.getById(id);
+      setFormData(data);
+    } catch (error) {
+      console.log(error);
     }
-  );
+  };
 
-  if (!existingRecord) {
-    return (
-      <MainLayout>
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <p className="text-slate-600">Record not found.</p>
-        </div>
-      </MainLayout>
-    );
-  }
+  loadRecord();
+}, [id]);
+
+if (!formData) {
+  return (
+    <MainLayout>
+      <div className="bg-white rounded-2xl border border-slate-200 p-6">
+        <p className="text-slate-600">Loading...</p>
+      </div>
+    </MainLayout>
+  );
+}
 
   const convertFileToBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -62,11 +61,17 @@ const EditRecord = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    recordService.update(formData);
-    navigate(`/reports/${formData.id}`);
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const updatedRecord = await recordService.update(id, formData);
+
+    navigate(`/reports/${updatedRecord._id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   return (
     <MainLayout>

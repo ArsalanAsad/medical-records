@@ -32,20 +32,37 @@ const Reports = () => {
   const [selectedRecordId, setSelectedRecordId] = useState(null);
 
   useEffect(() => {
-    if (!user?.email) return;
-    seedDemoRecords(user.email);
-    setRecords(recordService.getByUser(user.email));
-  }, [user]);
+  const loadRecords = async () => {
+    try {
+      const data = await recordService.getAll();
+      setRecords(data);
+    } catch (error) {
+      console.log("Failed to load records:", error.message);
+      setRecords([]);
+    }
+  };
 
-  const handleDelete = () => {
-  recordService.remove(selectedRecordId);
+  if (user) {
+    loadRecords();
+  }
+}, [user]);
 
-  setRecords(recordService.getByUser(user.email));
+ const handleDelete = async () => {
+  try {
+    await recordService.remove(selectedRecordId);
 
-  setShowModal(false);
-  setSelectedRecordId(null);
+    const updatedRecords = await recordService.getAll();
 
-  showToast("Record deleted successfully.", "success");
+    setRecords(updatedRecords);
+
+    setShowModal(false);
+    setSelectedRecordId(null);
+
+    showToast("Record deleted successfully.", "success");
+
+  } catch (error) {
+    showToast(error.message, "error");
+  }
 };
 
   const filteredRecords = useMemo(() => {
@@ -115,7 +132,7 @@ const Reports = () => {
           <div className="grid gap-4">
             {filteredRecords.map((record) => (
               <ReportCard
-                key={record.id}
+                key={record._id}
                 record={record}
                 onDelete={(id) => {
                setSelectedRecordId(id);

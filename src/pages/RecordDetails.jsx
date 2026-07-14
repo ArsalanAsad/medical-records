@@ -1,32 +1,49 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import recordService from "../services/recordService";
 import ConfirmModal from "../components/ConfirmModal";
 
-const RecordDetails = () => {
+  const RecordDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
-  const record = recordService.getById(id);
+  const [record, setRecord] = useState(null);
 
-  const handleDelete = () => {
-    recordService.remove(id);
-    setShowModal(false);
-    navigate("/reports");
+useEffect(() => {
+    const loadRecord = async () => {
+    try {
+      const data = await recordService.getById(id);
+      setRecord(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  if (!record) {
-    return (
-      <MainLayout>
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <p className="text-slate-600">Record not found.</p>
-        </div>
-      </MainLayout>
-    );
+  loadRecord();
+}, [id]);
+
+  const handleDelete = async () => {
+  try {
+    await recordService.remove(id);
+    setShowModal(false);
+    navigate("/reports");
+  } catch (error) {
+    console.log(error);
   }
+};
+
+  if (!record) {
+  return (
+    <MainLayout>
+      <div className="bg-white rounded-2xl border border-slate-200 p-6">
+        <p className="text-slate-600">Loading...</p>
+      </div>
+    </MainLayout>
+  );
+}
 
   const isImage = record.fileType?.startsWith("image/");
   const isPdf = record.fileType === "application/pdf";
@@ -44,7 +61,7 @@ const RecordDetails = () => {
 
           <div className="flex flex-wrap gap-3">
             <Link
-              to={`/reports/${record.id}/edit`}
+              to={`/reports/${record._id}/edit`}
               className="rounded-lg bg-amber-500 px-4 py-2 text-white transition hover:bg-amber-600"
             >
               Edit

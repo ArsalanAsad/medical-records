@@ -49,14 +49,14 @@ const ReportCard = ({ record, onDelete }) => {
 
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
-          to={`/reports/${record.id}`}
+          to={`/reports/${record._id}`}
           className="px-4 py-2 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-900 transition"
         >
           View Details
         </Link>
 
         <Link
-          to={`/reports/${record.id}/edit`}
+          to={`/reports/${record._id}/edit`}
           className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm hover:bg-amber-600 transition"
         >
           Edit
@@ -84,7 +84,7 @@ const ReportCard = ({ record, onDelete }) => {
         )}
 
         <button
-          onClick={() => onDelete(record.id)}
+          onClick={() => onDelete(record._id)}
           className="px-4 py-2 rounded-lg bg-red-500 text-white text-sm hover:bg-red-600 transition"
         >
           Delete
