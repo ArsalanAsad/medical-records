@@ -16,6 +16,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:3000",
+      "https://medical-records-nn26-9erpbpvyn-hh-tech.vercel.app",
     ],
     credentials: true,
   })
