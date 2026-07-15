@@ -7,6 +7,8 @@ import recordRoutes from "./routes/recordRoutes.js";
 
 dotenv.config();
 
+console.log("CLIENT_URL FROM ENV:", process.env.CLIENT_URL);
+
 const app = express();
 
 connectDB();
