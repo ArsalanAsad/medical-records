@@ -13,24 +13,31 @@ const app = express();
 
 connectDB();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  process.env.CLIENT_URL,
-];
+// const allowedOrigins = [
+//   "http://localhost:5173",
+//   "http://localhost:3000",
+//   process.env.CLIENT_URL,
+// ];
+
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       // Postman ya server-to-server requests ko allow kare
+//       if (!origin) return callback(null, true);
+
+//       if (allowedOrigins.includes(origin)) {
+//         return callback(null, true);
+//       }
+
+//       return callback(new Error("Not allowed by CORS"));
+//     },
+//     credentials: true,
+//   })
+// );
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Postman ya server-to-server requests ko allow kare
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("Not allowed by CORS"));
-    },
+    origin: "https://medical-records-nn26.vercel.app",
     credentials: true,
   })
 );
