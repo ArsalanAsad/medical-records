@@ -1,4 +1,4 @@
-MediVault - Medical Records Management System
+<img width="1274" height="770" alt="image" src="https://github.com/user-attachments/assets/6f52fb77-e7e6-4d2d-9c1e-d75492563602" />MediVault - Medical Records Management System
 
 MediVault is a full-stack MERN (MongoDB, Express.js, React, Node.js) application that allows users to securely manage their medical records digitally.
 
@@ -129,6 +129,7 @@ Run backend:
 npm run dev
 
 🔗 API Endpoints
+
 Authentication
 Method	Endpoint	Description
 POST	/api/auth/signup	Register user
@@ -142,33 +143,24 @@ DELETE	/api/records/:id	Delete record
 
 📸 Screenshots
 
+## Login
+![Login](screenshots/Login.png)
 
-Sign Up
+## Dashboard
+![Dashboard](screenshots/Dashbaord.png)
 
+## Upload Record
+![Upload Records](screenshots/Upload Records.png)
 
+## Reports
+![Reports](screenshots/Reports.png)
 
-
-Login
-
-
-
-
-Dashboard
-
-
-
-
-Upload Record
-
-
-
-
-Reports
-
-
+## Profile
+![Profile](screenshots/Profile.png)
 
 
 🔮 Future Improvements
+
 Cloud storage integration (AWS S3 / Cloudinary)
 Doctor appointment management
 Medical reminders
